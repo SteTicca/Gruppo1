@@ -15,7 +15,7 @@ def get_all_tweets(query):
 
     alltweets = []
 
-    oldest = "1017904511065653257"
+    oldest = "1017101377561120772"
 
     new_tweets = api.search(q = query, lang = "it", max_id = oldest, count = 200, tweet_mode = "extended")
     # new_tweets = api.search(q = query, lang = "it", count = 200, tweet_mode = "extended")
@@ -24,7 +24,7 @@ def get_all_tweets(query):
 
     oldest = alltweets[-1].id - 1
     while len(new_tweets) > 0:
-        print "getting tweets before %s" % (oldest)
+        print ("getting tweets before %s" % (oldest))
 
         new_tweets = api.search(q = query, lang = "it", count = 200, max_id=oldest, tweet_mode = "extended")
 
@@ -32,11 +32,11 @@ def get_all_tweets(query):
 
         oldest = alltweets[-1].id - 1
 
-        print "...%s tweets downloaded so far" % (len(alltweets))
+        print ("...%s tweets downloaded so far" % (len(alltweets)))
 
         outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text.encode('utf-8')] for tweet in alltweets if 'retweeted_status' not in dir(tweet)]
 
-        with open('hash7_tweets.csv', 'wb') as f:
+        with open('hash8_tweets.csv', 'wb') as f:
             writer = csv.writer(f)
             writer.writerow(["id", "created_at", "full_text"])
             writer.writerows(outtweets)
