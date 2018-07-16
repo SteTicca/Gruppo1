@@ -18,12 +18,10 @@ graph = facebook.GraphAPI(access_token=FACEBOOK_ACCESS_TOKEN, version=3.0)
 
 
 def serialize(object):
-    # restituisce la rappresentazione JSON di un oggetto
     return json.dumps(object, indent=1)
 
 
 def placeSearch():
-    # Ricerca i places vicino 1 Hacker Way in Menlo Park, California.
     places = graph.search(type='place',
                           center='37.4845306,-122.1498183',
                           fields='name,location')
@@ -32,37 +30,24 @@ def placeSearch():
 
 
 def getPosts():
-    # definisco l'oggetto da ricercare: puo' essere un id o il nome di una pagina ad esempio
     user = 'BillGates'
-    # recupero l'oggetto utilizzando le API
     profile = graph.get_object(user)
-    # Recupero i post associati al profilo recuperato
     posts = graph.get_connections(profile['id'], 'posts')
     print serialize(posts)
 
 
 def getPostWithPagination():
-    # definisco l'oggetto da ricercare: puo' essere un id o il nome di una pagina ad esempio
     user = 'BillGates'
-    # seleziono solo i campi da visualizzare
     fields = 'id,category,link,username,talking_about_count'
-    # richiedo l'oggetto alle API
     profile = graph.get_object(user, fields=fields)
-    # Stampo l'oggetto in formato JSON
     print serialize(profile)
-    # Recupero i post
     posts = graph.get_connections(profile['id'], 'posts')
-    # Continuo ad iterare sino a quando ci sono pagine
     while True:
         try:
             for post in posts['data']:
                 print serialize(post)
                 print serialize(graph.get_connections(post['id'], 'comments'))
-            # recupero i nuovi post utilizzando i link contenuti nell'oggetto restituito
             posts = requests.get(posts['paging']['next']).json()
-            # quando posts['paging'] non ha nessuna chiave 'next'
-            # viene lanciata l'eccezzione KeyError e significa che non
-            # ci son piu' pagine da iterare
         except KeyError:
             break
 
