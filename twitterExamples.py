@@ -211,5 +211,6 @@ if __name__ == '__main__':
     # topicModeling(query,count)
     # countingTweetObjects(query,count)
     # tweetsWordFrequency(query, count)
-    retweetFrequency(query, count)
+    # retweetFrequency(query, count)
     # retweetHistogram(query, count)
+    print cleanTweet(query, count)
